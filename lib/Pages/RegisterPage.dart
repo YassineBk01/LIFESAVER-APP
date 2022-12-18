@@ -1,6 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:lifesaver_app/Models/UserApp.dart';
+
+import '';
 
 
 class RegisterPage extends StatefulWidget {
@@ -12,10 +16,12 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
-  var email;
-  var password;
-  var fullname;
-  var phone;
+  final ControllerName = TextEditingController();
+  final ControllerPhone = TextEditingController();
+  final ControllerCIN = TextEditingController();
+  final ControllerEmail = TextEditingController();
+  final ControllerPassword = TextEditingController();
+  var error;
   double _height=250;
   @override
   Widget build(BuildContext context) {
@@ -61,113 +67,159 @@ class _RegisterPageState extends State<RegisterPage> {
                     color: Colors.white,
                   ),
                   padding: const EdgeInsets.only(top: 80, right: 20, left: 20),
-                  child :Form(
-                    key: _formKey,
+                  child : SingleChildScrollView(
                     child: Column(
                       children: [
-                        /// Text Fields
+                        SizedBox(height: 20,),
                         Container(
-
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(10),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: Colors.black.withOpacity(0.4),
-                                    blurRadius: 20,
-                                    spreadRadius: 5,
-                                    offset: const Offset(0, 10)
-                                )
-                              ]
-                          ),
+                            width:300,
+                            child: error != null ?
+                            Container(
+                              padding: EdgeInsets.all(5),
+                              color: Colors.red,
+                              child: Text(
+                                error,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize:14,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ):
+                            null
+                        ),
+                        Form(
+                          key: _formKey,
                           child: Column(
-                            children:  [
-                              TextFormField(
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: 'Fullname',
-                                  contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                                ),
-                                validator: (firstname) {
-                                  if (firstname!.isEmpty) {
-                                    return 'Please enter your first name';
-                                  }
-                                  fullname = firstname;
-                                  return null;
-                                },
-                              ),
-                              Divider(height: 10,),
-                              TextFormField(
+                            children: [
+                              /// Text Fields
+                              Container(
 
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: 'Email',
-                                  contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(10),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.black.withOpacity(0.4),
+                                          blurRadius: 20,
+                                          spreadRadius: 5,
+                                          offset: const Offset(0, 10)
+                                      )
+                                    ]
                                 ),
-                                validator: (emailValue) {
-                                  if (emailValue!.isEmpty || !EmailValidator.validate(emailValue)) {
-                                    return 'Please enter email';
+                                child: Column(
+                                  children:  [
+                                    TextFormField(
+                                      controller : ControllerName,
+                                      decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: 'Fullname',
+                                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                                      ),
+                                      validator: (firstname) {
+                                        if (firstname!.isEmpty) {
+                                          return 'Please enter your first name';
+                                        }
 
-                                  }
-                                  email = emailValue;
-                                  return null;
-                                },
-                              ),
-                              Divider(height: 10,),
-                              TextFormField(
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: 'Phone',
-                                  contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                                        return null;
+                                      },
+                                    ),
+                                    Divider(height: 10,),
+                                    TextFormField(
+                                      controller : ControllerCIN,
+                                      decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: 'CIN',
+                                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                                      ),
+                                      validator: (cin) {
+                                        if (cin!.isEmpty) {
+                                          return 'Please enter your CIN';
+                                        }
 
+                                        return null;
+                                      },
+                                    ),
+                                    Divider(height: 10,),
+                                    TextFormField(
+                                      controller : ControllerPhone,
+                                      decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: 'Phone',
+                                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
+
+                                      ),
+                                      validator: (phonenumber) {
+
+                                        if (phonenumber!.isEmpty) {
+                                          return 'Please enter phone number';
+
+                                        }
+
+                                        return null;
+                                      },
+                                    ),
+                                    Divider(height: 10,),
+                                    TextFormField(
+                                      controller : ControllerEmail,
+                                      decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: 'Email',
+                                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                                      ),
+                                      validator: (emailValue) {
+                                        if (emailValue!.isEmpty || !EmailValidator.validate(emailValue)) {
+                                          return 'Please enter email';
+
+                                        }
+
+                                        return null;
+                                      },
+                                    ),
+                                    Divider(height: 10,),
+                                    TextFormField(
+                                      controller : ControllerPassword,
+                                      obscureText: true,
+                                      decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: 'Password',
+                                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                                      ),
+                                      validator: (passwordValue) {
+                                        if (passwordValue!.isEmpty) {
+                                          return 'Please enter some text';
+                                        }
+
+                                        return null;
+                                      },
+                                    ),
+                                  ],
                                 ),
-                                validator: (phonenumber) {
-                                  if (phonenumber!.isEmpty) {
-                                    return 'Please enter phone number';
+                              ),
+                              const SizedBox(height: 30),
+                              /// Sign Up
+                              MaterialButton(
+                                shape: const StadiumBorder(),
+                                minWidth: 230,
+                                height: 45,
+                                color: Colors.blue[800],
+                                child: const Text('SignUp', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white,fontSize: 17),textAlign: TextAlign.center,),
+                                onPressed: (){if (_formKey.currentState!.validate()) {
+                                  final newUser =UserApp(id: "", fullname: ControllerName.text, age: 21, cin: ControllerCIN.text, phone: ControllerPhone.text, email: ControllerPhone.text, password: ControllerPassword.text);
+                                  signUp(newUser);
+                                }},
+                              ),
+                              const SizedBox(height: 30),
 
-                                  }
-                                  phone = phonenumber;
-                                  return null;
-                                },
-                              ),
-                              Divider(height: 10,),
-                              TextFormField(
-                                obscureText: true,
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: 'Password',
-                                  contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                                ),
-                                validator: (passwordValue) {
-                                  if (passwordValue!.isEmpty) {
-                                    return 'Please enter some text';
-                                  }
-                                  password = passwordValue;
-                                  return null;
-                                },
-                              ),
+
+
+
                             ],
                           ),
-                        ),
-                        const SizedBox(height: 30),
-                        /// Sign Up
-                        MaterialButton(
-                          shape: const StadiumBorder(),
-                          minWidth: 230,
-                          height: 45,
-                          color: Colors.blue[800],
-                          child: const Text('SignUp', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white,fontSize: 17),textAlign: TextAlign.center,),
-                          onPressed: (){if (_formKey.currentState!.validate()) {
-                            signUp();
-                          }},
-                        ),
-                        const SizedBox(height: 30),
-
-
-
-
+                        )
                       ],
                     ),
+
                   )
 
               ),
@@ -177,17 +229,25 @@ class _RegisterPageState extends State<RegisterPage> {
       ),
     );
   }
-  Future signUp() async{
+  Future signUp(UserApp newUser) async{
     showDialog(
         context: context,
         barrierDismissible: false,
         builder: (context) => Center(child: CircularProgressIndicator(),)
     );
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
+      UserCredential userCredential =await FirebaseAuth.instance.createUserWithEmailAndPassword(email: ControllerEmail.text.trim(), password: ControllerPassword.text.trim());
+      newUser.id = userCredential.user!.uid.toString();
+      final json = newUser.toJson();
+      await FirebaseFirestore.instance.collection("users").doc(newUser.id).set(json);
+
     } on FirebaseAuthException catch (e){
       print(e);
+      setState(() {
+        error=e.message;
+      });
     }
+
 
     Navigator.of(context).popUntil((route) => route.isFirst);
 
