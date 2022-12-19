@@ -42,6 +42,8 @@ dependencies:
   font_awesome_flutter: ^10.3.0
   google_fonts: ^3.0.1
   json_annotation: ^4.7.0
+  blinkid_flutter: ^5.18.0
+  get: ^4.6.5
 
 
 dev_dependencies:

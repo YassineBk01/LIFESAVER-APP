@@ -4,7 +4,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lifesaver_app/Models/UserApp.dart';
+import 'package:lifesaver_app/Pages/MedicalFormPage.dart';
+
 import 'package:lifesaver_app/Widgets/DrawerWidget.dart';
+import 'package:lifesaver_app/Widgets/WarningWidget.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -15,12 +19,40 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late UserApp currentUser = UserApp(id: "", fullname: "fullname", age: 21, cin: "cin", phone: "phone", email: "email", password: "password");
   final user = FirebaseAuth.instance.currentUser!;
-  final userAllInfo = FirebaseFirestore.instance.collection("users").doc(FirebaseAuth.instance.currentUser!.uid.toString()).get();
+
+
+  void getUsersData() async {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid.toString())
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        print('Document data: ${documentSnapshot.data()}');
+        Map<String, dynamic> data = documentSnapshot.data()! as Map<String, dynamic>;
+        setState(() {
+          currentUser = UserApp(id: data['id'], fullname: data['fullname'], age: data['age'], cin: data['cin'], phone: data['phone'], email: data['email'], password: data['password']);
+        });
+
+
+      } else {
+        print('Document does not exist on the database');
+      }
+    });
+  }
+
+  @override
+  void initState() {
+
+    super.initState();
+    getUsersData();
+  }
 
   @override
   Widget build(BuildContext context) {
-    print(userAllInfo.toString());
+
     return Scaffold(
 
       appBar: AppBar(
@@ -47,58 +79,10 @@ class _HomePageState extends State<HomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+
             Container(
-              height: 180,
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width,
-              color: Color.fromARGB(255, 255, 179, 0),
-              margin: EdgeInsets.only(top: 15),
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  Align(
-                    alignment: Alignment.topLeft,
-                    child: Text(
-                      'Looking for a digital transformation companion?',
-                      style: GoogleFonts.notoSans(
-                          fontSize: 20,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 10,),
-                  Center(
-                    child: ElevatedButton.icon(
-
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: Size(150, 50),
-                        primary: Color.fromARGB(255, 6, 45, 108),
-                        onPrimary: Colors.white,
-                        textStyle: GoogleFonts.atma(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      onPressed: () {
-
-                      },
-                      label: Text(
-                        "Contact Us",
-                      ), icon: Icon(
-                      Icons.contact_page_outlined,
-                      color: Colors.white,
-                    ),
-
-
-                    ),
-                  ),
-                ],
-              ),
+              child: currentUser.hasMedicalFile? null : WarningWidget()
             ),
-            SizedBox(height: 30,),
             Container(
               margin: EdgeInsets.only(right: 150),
               width: 200,

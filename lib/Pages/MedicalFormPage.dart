@@ -1,29 +1,22 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:lifesaver_app/Models/UserApp.dart';
-import 'package:lifesaver_app/Pages/MedicalFormPage.dart';
 
-import '';
-
-
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({Key? key}) : super(key: key);
+class MedicalFormPage extends StatefulWidget {
+  const MedicalFormPage({Key? key}) : super(key: key);
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  State<MedicalFormPage> createState() => _MedicalFormPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _MedicalFormPageState extends State<MedicalFormPage> {
+  final user = FirebaseAuth.instance.currentUser!;
+  var error;
   final _formKey = GlobalKey<FormState>();
   final ControllerName = TextEditingController();
   final ControllerPhone = TextEditingController();
   final ControllerCIN = TextEditingController();
   final ControllerEmail = TextEditingController();
   final ControllerPassword = TextEditingController();
-  var error;
-  double _height=250;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,14 +39,14 @@ class _RegisterPageState extends State<RegisterPage> {
           children: [
             /// Sign up & Welcome
             Container(
-                padding: const EdgeInsets.only(top:80, bottom: 30, right: 20),
+                padding: const EdgeInsets.only(top:80, bottom: 30, left: 20),
                 width: MediaQuery.of(context).size.width,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: const [
-                    Text('LifeSaver', style: TextStyle(color: Colors.white, fontSize: 40),),
-                    SizedBox(height: 10),
-                    Text('Welcome', style: TextStyle(color: Colors.white, fontSize: 18),),
+                    Text('Medical Form', style: TextStyle(color: Colors.white, fontSize: 40),),
+                    SizedBox(height: 20),
+                    Text('Life Saver App', style: TextStyle(color: Colors.white, fontSize: 18),),
                   ],
                 )
             ),
@@ -71,7 +64,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   child : SingleChildScrollView(
                     child: Column(
                       children: [
-                        SizedBox(height: 20,),
+
                         Container(
                             width:300,
                             child: error != null ?
@@ -169,7 +162,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                         contentPadding: EdgeInsets.symmetric(horizontal: 10),
                                       ),
                                       validator: (emailValue) {
-                                        if (emailValue!.isEmpty || !EmailValidator.validate(emailValue)) {
+                                        if (emailValue!.isEmpty ) {
                                           return 'Please enter email';
 
                                         }
@@ -204,10 +197,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                 minWidth: 230,
                                 height: 45,
                                 color: Colors.blue[800],
-                                child: const Text('SignUp', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white,fontSize: 17),textAlign: TextAlign.center,),
+                                child: const Text('Submit', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white,fontSize: 17),textAlign: TextAlign.center,),
                                 onPressed: (){if (_formKey.currentState!.validate()) {
-                                  final newUser =UserApp(id: "", fullname: ControllerName.text, age: 21, cin: ControllerCIN.text, phone: ControllerPhone.text, email: ControllerPhone.text, password: ControllerPassword.text);
-                                  signUp(newUser);
+
                                 }},
                               ),
                               const SizedBox(height: 30),
@@ -229,29 +221,5 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
       ),
     );
-  }
-  Future signUp(UserApp newUser) async{
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) => Center(child: CircularProgressIndicator(),)
-    );
-    try {
-      UserCredential userCredential =await FirebaseAuth.instance.createUserWithEmailAndPassword(email: ControllerEmail.text.trim(), password: ControllerPassword.text.trim());
-      newUser.id = userCredential.user!.uid.toString();
-      final json = newUser.toJson();
-      await FirebaseFirestore.instance.collection("users").doc(newUser.id).set(json);
-
-    } on FirebaseAuthException catch (e){
-      print(e);
-      setState(() {
-        error=e.message;
-      });
-    }
-
-
-    Navigator.of(context).popUntil((route) => route.isFirst);
-
-
   }
 }

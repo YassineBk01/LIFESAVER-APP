@@ -1,6 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:lifesaver_app/Pages/MedicalFormPage.dart';
 import 'package:lifesaver_app/Pages/RegisterPage.dart';
 import 'package:lifesaver_app/Utils.dart';
 
@@ -164,6 +165,7 @@ class _LoginInterfaceState extends State<LoginInterface> {
 
                                             if (_formKey.currentState!.validate()) {
                                               signIn();
+
                                             }
                                           },
                                           child: Container(
@@ -228,6 +230,7 @@ class _LoginInterfaceState extends State<LoginInterface> {
     );
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+
     } on FirebaseAuthException catch (e){
 
       print(e);

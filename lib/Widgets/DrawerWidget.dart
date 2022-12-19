@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lifesaver_app/Pages/LoginPage.dart';
+import 'package:lifesaver_app/Pages/ProfilePage.dart';
 
 
 class DrawerWidget extends StatefulWidget {
@@ -62,7 +63,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               leading: FaIcon(FontAwesomeIcons.cubes, size: _drawerIconSize,color: Theme.of(context).accentColor),
               title: Text('Profil',style: TextStyle(fontSize: _drawerFontSize,color: Theme.of(context).accentColor),),
               onTap: () {
-                // Navigator.push(context, MaterialPageRoute(builder: (context) => RegistrationPage()),);
+                Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()),);
               },
             ),
             ListTile(

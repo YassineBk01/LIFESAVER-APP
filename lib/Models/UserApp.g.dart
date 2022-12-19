@@ -14,6 +14,8 @@ UserApp _$UserFromJson(Map<String, dynamic> json) => UserApp(
       phone: json['phone'] as String,
       email: json['email'] as String,
       password: json['password'] as String,
+      isVerified: json['isVerified'] as bool? ?? false,
+      hasMedicalFile: json['hasMedicalFile'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$UserToJson(UserApp instance) => <String, dynamic>{
@@ -24,4 +26,6 @@ Map<String, dynamic> _$UserToJson(UserApp instance) => <String, dynamic>{
       'password': instance.password,
       'cin': instance.cin,
       'phone': instance.phone,
+      'isVerified': instance.isVerified,
+      'hasMedicalFile': instance.hasMedicalFile,
     };

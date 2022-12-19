@@ -13,9 +13,12 @@ class UserApp {
     required this.cin,
     required this.phone,
     required this.email,
-    required this.password
+    required this.password,
+    this.isVerified = false,
+    this.hasMedicalFile = false,
 
   });
+
 
 
 
@@ -26,6 +29,8 @@ class UserApp {
   final String password;
   final String cin;
   final String phone;
+  final bool isVerified;
+  final bool hasMedicalFile;
 
 
   factory UserApp.fromJson(Map<String, Object?> json) => _$UserFromJson(json);

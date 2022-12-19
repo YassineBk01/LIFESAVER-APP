@@ -3,9 +3,12 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:lifesaver_app/Pages/HomePage.dart';
 import 'package:lifesaver_app/Pages/LoginPage.dart';
+import 'package:lifesaver_app/Pages/MedicalFormPage.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -46,6 +49,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   var page;
   bool _isVisible = false;
+
 
   _MyHomePageState(){
 
