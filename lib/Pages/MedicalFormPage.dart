@@ -104,15 +104,16 @@ class _MedicalFormPageState extends State<MedicalFormPage> {
                                 child: Column(
                                   children:  [
                                     TextFormField(
+                                      keyboardType: TextInputType.number,
                                       controller : ControllerName,
                                       decoration: InputDecoration(
                                         border: InputBorder.none,
-                                        hintText: 'Fullname',
+                                        hintText: 'Height in cm',
                                         contentPadding: EdgeInsets.symmetric(horizontal: 10),
                                       ),
                                       validator: (firstname) {
                                         if (firstname!.isEmpty) {
-                                          return 'Please enter your first name';
+                                          return 'Please enter your Height';
                                         }
 
                                         return null;
@@ -120,15 +121,16 @@ class _MedicalFormPageState extends State<MedicalFormPage> {
                                     ),
                                     Divider(height: 10,),
                                     TextFormField(
+                                      keyboardType: TextInputType.number,
                                       controller : ControllerCIN,
                                       decoration: InputDecoration(
                                         border: InputBorder.none,
-                                        hintText: 'CIN',
+                                        hintText: 'Weight in kg',
                                         contentPadding: EdgeInsets.symmetric(horizontal: 10),
                                       ),
                                       validator: (cin) {
                                         if (cin!.isEmpty) {
-                                          return 'Please enter your CIN';
+                                          return 'Please enter your Weight';
                                         }
 
                                         return null;
@@ -136,17 +138,19 @@ class _MedicalFormPageState extends State<MedicalFormPage> {
                                     ),
                                     Divider(height: 10,),
                                     TextFormField(
+                                      keyboardType: TextInputType.number,
                                       controller : ControllerPhone,
                                       decoration: InputDecoration(
+
                                         border: InputBorder.none,
-                                        hintText: 'Phone',
+                                        hintText: 'Age',
                                         contentPadding: EdgeInsets.symmetric(horizontal: 10),
 
                                       ),
                                       validator: (phonenumber) {
 
                                         if (phonenumber!.isEmpty) {
-                                          return 'Please enter phone number';
+                                          return 'Please enter Age';
 
                                         }
 
@@ -158,35 +162,13 @@ class _MedicalFormPageState extends State<MedicalFormPage> {
                                       controller : ControllerEmail,
                                       decoration: InputDecoration(
                                         border: InputBorder.none,
-                                        hintText: 'Email',
+                                        hintText: 'if you have an allergy describe it  ',
                                         contentPadding: EdgeInsets.symmetric(horizontal: 10),
                                       ),
-                                      validator: (emailValue) {
-                                        if (emailValue!.isEmpty ) {
-                                          return 'Please enter email';
 
-                                        }
-
-                                        return null;
-                                      },
                                     ),
                                     Divider(height: 10,),
-                                    TextFormField(
-                                      controller : ControllerPassword,
-                                      obscureText: true,
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
-                                        hintText: 'Password',
-                                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                                      ),
-                                      validator: (passwordValue) {
-                                        if (passwordValue!.isEmpty) {
-                                          return 'Please enter some text';
-                                        }
 
-                                        return null;
-                                      },
-                                    ),
                                   ],
                                 ),
                               ),
