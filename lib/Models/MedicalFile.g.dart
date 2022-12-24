@@ -18,6 +18,7 @@ MedicalFile _$MedicalFileFromJson(Map<String, dynamic> json) => MedicalFile(
       json['bloodGroup'] as String,
       json['covidVaccine'] as String,
       json['dozeNumber'] as int,
+      json['otherDisease'] as String,
     );
 
 Map<String, dynamic> _$MedicalFileToJson(MedicalFile instance) =>
@@ -33,4 +34,5 @@ Map<String, dynamic> _$MedicalFileToJson(MedicalFile instance) =>
       'bloodGroup': instance.bloodGroup,
       'covidVaccine': instance.covidVaccine,
       'dozeNumber': instance.dozeNumber,
+      'otherDisease': instance.otherDisease,
     };

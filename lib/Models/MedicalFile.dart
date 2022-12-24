@@ -18,7 +18,7 @@ class MedicalFile {
       this.bloodGroup,
       this.covidVaccine,
       this.dozeNumber,
-
+      this.otherDisease
       );
 
   String id;
@@ -32,6 +32,7 @@ class MedicalFile {
   String bloodGroup;
   String covidVaccine;
   int dozeNumber;
+  String otherDisease;
 
   factory MedicalFile.fromJson(Map<String, Object?> json) => _$MedicalFileFromJson(json);
 

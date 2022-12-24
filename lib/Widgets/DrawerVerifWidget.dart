@@ -5,14 +5,14 @@ import 'package:lifesaver_app/Pages/LoginPage.dart';
 import 'package:lifesaver_app/Pages/ProfilePage.dart';
 
 
-class DrawerWidget extends StatefulWidget {
-  const DrawerWidget({Key? key}) : super(key: key);
+class DrawerVerifWidget extends StatefulWidget {
+  const DrawerVerifWidget({Key? key}) : super(key: key);
 
   @override
-  State<DrawerWidget> createState() => _DrawerWidgetState();
+  State<DrawerVerifWidget> createState() => _DrawerVerifWidgetState();
 }
 
-class _DrawerWidgetState extends State<DrawerWidget> {
+class _DrawerVerifWidgetState extends State<DrawerVerifWidget> {
   double  _drawerIconSize = 24;
   double _drawerFontSize = 17;
   @override
@@ -66,16 +66,6 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()),);
               },
             ),
-            ListTile(
-              leading: FaIcon(FontAwesomeIcons.idCard, size: _drawerIconSize,color: Theme.of(context).accentColor),
-              title: Text('Vérifier votre Identité',style: TextStyle(fontSize: _drawerFontSize,color: Theme.of(context).accentColor),),
-              onTap: () {
-                //Navigator.push( co
-                //
-                // ntext, MaterialPageRoute(builder: (context) => ForgotPasswordPage()),);
-              },
-            ),
-            Divider(color: Theme.of(context).primaryColor, height: 1,),
             ListTile(
               leading: FaIcon(FontAwesomeIcons.notesMedical, size: _drawerIconSize,color: Theme.of(context).accentColor),
               title: Text('Indications de secours',style: TextStyle(fontSize: _drawerFontSize,color: Theme.of(context).accentColor),),

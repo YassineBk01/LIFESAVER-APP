@@ -44,6 +44,9 @@ dependencies:
   json_annotation: ^4.7.0
   blinkid_flutter: ^5.18.0
   get: ^4.6.5
+  image_picker: ^0.8.6
+  firebase_storage: ^11.0.9
+  file_picker: ^5.2.4
 
 
 dev_dependencies:

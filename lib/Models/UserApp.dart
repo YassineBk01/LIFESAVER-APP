@@ -14,9 +14,9 @@ class UserApp {
     required this.phone,
     required this.email,
     required this.password,
+    this.profileImg="assets/images/profile.jpg",
     this.isVerified = false,
     this.hasMedicalFile = false,
-
   });
 
 
@@ -31,6 +31,7 @@ class UserApp {
   final String phone;
   final bool isVerified;
   final bool hasMedicalFile;
+  String profileImg;
 
 
   factory UserApp.fromJson(Map<String, Object?> json) => _$UserFromJson(json);

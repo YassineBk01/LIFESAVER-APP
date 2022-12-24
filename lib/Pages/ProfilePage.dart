@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lifesaver_app/Models/UserApp.dart';
 import 'package:lifesaver_app/Widgets/DrawerWidget.dart';
 
@@ -15,6 +20,61 @@ class _ProfilePageState extends State<ProfilePage> {
   late UserApp currentUser = UserApp(id: "", fullname: "fullname", age: 21, cin: "cin", phone: "phone", email: "email", password: "password");
   final user = FirebaseAuth.instance.currentUser!;
 
+  String? pathProfileImmg;
+  String? imagUrl;
+  PickedFile? pickedFile;
+  String? fileName;
+  UploadTask? uploadTask;
+
+  Future getUrl() async{
+
+    if(currentUser.profileImg == "assets/images/profile.jpg" ){
+      setState(() {
+        pathProfileImmg = "assets/images/profile.jpg";
+      });
+    }
+    else{
+
+      final storageRef = FirebaseStorage.instance.ref();
+      final url = await storageRef.child("imgFiles").getDownloadURL();
+      setState(() {
+        imagUrl = url;
+      });
+
+    }
+  }
+
+  Future selectFile() async {
+    final result = await FilePicker.platform.pickFiles(type: FileType.image);
+    if(result ==null) return;
+
+    setState(() {
+      pickedFile =result.files.first as PickedFile?;
+      fileName = result.files.first.name;
+    });
+
+  }
+
+  Future uploadFile() async {
+    final path ='imgFiles/${currentUser.id.toString()}/${fileName}';
+    final file =File(pickedFile!.path);
+
+    final ref = FirebaseStorage.instance.ref().child(path);
+
+    setState(() {
+      uploadTask = ref.putFile(file);
+    });
+
+    final snapshot =  await uploadTask!.whenComplete(() {});
+
+    await FirebaseFirestore.instance.collection("users").doc(currentUser.id.toString()).set({
+      'profileImg': path,
+    }).then((value) => print("Path modifié")).catchError((error) => print("Failed to modify path: $error"));
+
+    setState(() {
+      uploadTask =null;
+    });
+  }
 
   void getUsersData() async {
     FirebaseFirestore.instance
@@ -103,6 +163,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                     painter: HeaderCurvedContainer(),
                   ),
+
                   Center(
                     child: Column(
 
@@ -119,6 +180,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ),
                         ),
+
                         Container(
 
                           width: MediaQuery.of(context).size.width / 2.6,
@@ -127,15 +189,30 @@ class _ProfilePageState extends State<ProfilePage> {
                             border: Border.all(color: Colors.white, width: 5),
                             shape: BoxShape.circle,
                             color: Colors.white,
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: AssetImage('assets/images/profile.jpg'),
-                            ),
+                            image: (pickedFile == null) ? (imagUrl == null) ? Image.asset("assets/images/profile.jpg",fit: BoxFit.cover,) as DecorationImage? : Image.network(imagUrl!,fit: BoxFit.cover) as DecorationImage?
+                            : Image.file(File(pickedFile!.path),fit: BoxFit.cover,) as DecorationImage?,
                           ),
                         ),
                       ],
                     ),
                   ),
+                  Container(
+                    padding: EdgeInsets.only(top:160,left:255),
+                    child: CircleAvatar(
+
+                      backgroundColor: Colors.black54,
+                      child: IconButton(
+                        icon: Icon(
+                          Icons.edit,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          selectFile();
+                        },
+                      ),
+                    ),
+                  ),
+
                 ],
               ),
             ),
@@ -164,7 +241,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         height: 55,
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            uploadFile();
+                          },
                           child: Center(
                             child: Text(
                               "Update",
@@ -186,7 +265,40 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
       ),
     );
+
   }
+  Widget buildProgress() => StreamBuilder<TaskSnapshot>(
+      stream: uploadTask!.snapshotEvents,
+      builder: (builder,snapshot){
+          if (snapshot.hasData){
+            final data = snapshot.data!;
+            double progress = data.bytesTransferred / data.totalBytes;
+
+            return SizedBox(
+              height: 50,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  LinearProgressIndicator(
+                    value: progress,
+                    backgroundColor: Colors.grey,
+                    color: Colors.green,
+                  ),
+                  Center(
+                    child: Text(
+                      '${(100*progress).roundToDouble()}%',
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  )
+                ],
+
+              ),
+            );
+          }else{
+            return const SizedBox(height: 50,);
+          }
+      }
+  );
 }
 
 class HeaderCurvedContainer extends CustomPainter {

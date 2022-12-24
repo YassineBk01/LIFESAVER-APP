@@ -17,6 +17,8 @@ class _MedicalFormPageState extends State<MedicalFormPage> {
   final ControllerCIN = TextEditingController();
   final ControllerEmail = TextEditingController();
   final ControllerPassword = TextEditingController();
+
+  String Diabite = "No";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -151,9 +153,7 @@ class _MedicalFormPageState extends State<MedicalFormPage> {
 
                                         if (phonenumber!.isEmpty) {
                                           return 'Please enter Age';
-
                                         }
-
                                         return null;
                                       },
                                     ),
@@ -162,7 +162,7 @@ class _MedicalFormPageState extends State<MedicalFormPage> {
                                       controller : ControllerEmail,
                                       decoration: InputDecoration(
                                         border: InputBorder.none,
-                                        hintText: 'if you have an allergy describe it  ',
+                                        hintText: 'If you have an allergy describe it  ',
                                         contentPadding: EdgeInsets.symmetric(horizontal: 10),
                                       ),
 
@@ -172,7 +172,29 @@ class _MedicalFormPageState extends State<MedicalFormPage> {
                                   ],
                                 ),
                               ),
-                              const SizedBox(height: 30),
+                              Divider(height: 10,),
+                              DropdownButtonFormField(
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: 'Do you have diabite',
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                                ),
+                                  value: Diabite,
+                                  items: <String>["Yes","No"].map<DropdownMenuItem<String>>((String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(
+                                        value,
+                                        style: TextStyle(fontSize: 20),
+                                      ),
+                                    );}).toList(),
+                                  onChanged: (String? newValue) {
+                                    setState(() {
+                                      Diabite = newValue!;
+                                    });
+                                  },
+                              ),
+                               SizedBox(height: 30),
                               /// Sign Up
                               MaterialButton(
                                 shape: const StadiumBorder(),
