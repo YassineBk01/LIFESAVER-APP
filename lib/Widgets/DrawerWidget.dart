@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lifesaver_app/Pages/HomePage.dart';
 import 'package:lifesaver_app/Pages/LoginPage.dart';
 import 'package:lifesaver_app/Pages/ProfilePage.dart';
 
@@ -55,7 +56,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               leading: Icon(FontAwesomeIcons.homeUser, size: _drawerIconSize,color: Theme.of(context).accentColor),
               title: Text('Home Page',style: TextStyle(fontSize: _drawerFontSize,color: Theme.of(context).accentColor),),
               onTap: () {
-                //Navigator.push(context, MaterialPageRoute(builder: (context) => ManageInterventions()),);
+                Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()),);
               },
             ),
             Divider(color: Theme.of(context).primaryColor, height: 1,),
@@ -66,6 +67,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => ProfilePage()),);
               },
             ),
+
             ListTile(
               leading: FaIcon(FontAwesomeIcons.idCard, size: _drawerIconSize,color: Theme.of(context).accentColor),
               title: Text('Vérifier votre Identité',style: TextStyle(fontSize: _drawerFontSize,color: Theme.of(context).accentColor),),

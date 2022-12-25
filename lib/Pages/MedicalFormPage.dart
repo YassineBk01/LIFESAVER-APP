@@ -17,8 +17,13 @@ class _MedicalFormPageState extends State<MedicalFormPage> {
   final ControllerCIN = TextEditingController();
   final ControllerEmail = TextEditingController();
   final ControllerPassword = TextEditingController();
+  final ControllerDisease = TextEditingController();
+  
+  String Diabite = "Do you have Diabite";
+  String heartDisease = "Do you have Heart Disease";
+  String covidVaccine = "Are you vaccinated for covid19";
 
-  String Diabite = "No";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -159,6 +164,18 @@ class _MedicalFormPageState extends State<MedicalFormPage> {
                                     ),
                                     Divider(height: 10,),
                                     TextFormField(
+                                      keyboardType: TextInputType.number,
+                                      controller : ControllerPassword,
+                                      decoration: InputDecoration(
+
+                                        border: InputBorder.none,
+                                        hintText: 'Group Blood ex: "O+,AB-,A+..."',
+                                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
+
+                                      ),
+                                    ),
+                                    Divider(height: 10,),
+                                    TextFormField(
                                       controller : ControllerEmail,
                                       decoration: InputDecoration(
                                         border: InputBorder.none,
@@ -168,34 +185,104 @@ class _MedicalFormPageState extends State<MedicalFormPage> {
 
                                     ),
                                     Divider(height: 10,),
+                                    DropdownButtonFormField(
+                                      decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: 'Do you have diabite',
+                                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                                      ),
+                                      value: Diabite,
+                                      items: <String>["Do you have Diabite","Yes","No"].map<DropdownMenuItem<String>>((String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: (Diabite == "Do you have Diabite") ? Text(
+                                            value,
+                                            style: TextStyle(fontSize: 16,color: Colors.black54),
+                                          ) : Text(
+                                            value,
+                                            style: TextStyle(fontSize: 20),
+                                          ),
+                                        );}).toList(),
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          Diabite = newValue!;
+                                        });
+                                      },
+                                    ),
+                                    Divider(height: 10,),
+                                    DropdownButtonFormField(
+                                      decoration: InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: 'Do you have Heart Didease',
+                                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                                      ),
+                                      value: heartDisease,
+                                      items: <String>["Do you have Heart Disease","Yes","No"].map<DropdownMenuItem<String>>((String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: (heartDisease == "Do you have Heart Disease") ? Text(
+                                            value,
+                                            style: TextStyle(fontSize: 16,color: Colors.black54),
+                                          ) : Text(
+                                            value,
+                                            style: TextStyle(fontSize: 20),
+                                          ),
+                                        );}).toList(),
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          heartDisease = newValue!;
+                                        });
+                                      },
+                                    ),
+                                    Divider(height: 10,),
+                                    Row(
+                                      children: <Widget>[
+                                        Expanded(
+                                            child: DropdownButtonFormField(
+                                              decoration: InputDecoration(
+                                                border: InputBorder.none,
+                                                contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                                              ),
+                                              value: "Are you vaccinated for covid19",
+                                              items: <String>["Are you vaccinated for covid19","Yes","No"].map<DropdownMenuItem<String>>((String value) {
+                                                return DropdownMenuItem<String>(
+                                                  value: value,
+                                                  child: (covidVaccine == "Are you vaccinated for covid19") ? Text(
+                                                    value,
+                                                    style: TextStyle(fontSize: 16,color: Colors.black54),
+                                                  ) : Text(
+                                                    value,
+                                                    style: TextStyle(fontSize: 20),
+                                                  ),
+                                                );}).toList(),
+                                              onChanged: (String? newValue) {
+                                                setState(() {
+                                                  covidVaccine = newValue!;
+                                                });
+                                              },
+                                            ),
+                                        ),
+                                      ],
+                                    ),
+                                    Divider(height: 10,),
+                                    TextFormField(
+                                      controller : ControllerDisease,
+                                      decoration: InputDecoration(
 
+                                        border: InputBorder.none,
+                                        hintText: 'If you had other Diseases indicate its',
+                                        contentPadding: EdgeInsets.symmetric(horizontal: 10),
+
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
-                              Divider(height: 10,),
-                              DropdownButtonFormField(
-                                decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: 'Do you have diabite',
-                                  contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                                ),
-                                  value: Diabite,
-                                  items: <String>["Yes","No"].map<DropdownMenuItem<String>>((String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(
-                                        value,
-                                        style: TextStyle(fontSize: 20),
-                                      ),
-                                    );}).toList(),
-                                  onChanged: (String? newValue) {
-                                    setState(() {
-                                      Diabite = newValue!;
-                                    });
-                                  },
-                              ),
+
+
+
                                SizedBox(height: 30),
-                              /// Sign Up
+
                               MaterialButton(
                                 shape: const StadiumBorder(),
                                 minWidth: 230,

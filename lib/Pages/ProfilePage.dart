@@ -189,9 +189,13 @@ class _ProfilePageState extends State<ProfilePage> {
                             border: Border.all(color: Colors.white, width: 5),
                             shape: BoxShape.circle,
                             color: Colors.white,
-                            image: (pickedFile == null) ? (imagUrl == null) ? Image.asset("assets/images/profile.jpg",fit: BoxFit.cover,) as DecorationImage? : Image.network(imagUrl!,fit: BoxFit.cover) as DecorationImage?
-                            : Image.file(File(pickedFile!.path),fit: BoxFit.cover,) as DecorationImage?,
+                            image: DecorationImage(
+                                image: (pickedFile == null) ? (imagUrl == null) ? AssetImage("assets/images/profile.jpg") : NetworkImage(imagUrl!) as ImageProvider
+                                      : FileImage(File(pickedFile!.path)),
+                                fit: BoxFit.cover,
+                            )
                           ),
+
                         ),
                       ],
                     ),

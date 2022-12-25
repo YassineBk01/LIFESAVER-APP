@@ -366,7 +366,7 @@ class _HomePageState extends State<HomePage> {
 
 
                   ),
-                  SizedBox(height: 7,),
+
                   Container(
                     padding: EdgeInsets.only(left: 9),
                     child: Text(
@@ -439,7 +439,7 @@ class _HomePageState extends State<HomePage> {
 
 
                   ),
-                  SizedBox(height: 7,),
+
                   Container(
                     padding: EdgeInsets.only(left: 9),
                     child: Text(
@@ -523,7 +523,6 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 12,),
                   Align(
                     alignment: Alignment.center,
                     child: InkWell(
