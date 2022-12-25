@@ -48,6 +48,7 @@ dependencies:
   firebase_storage: ^11.0.9
   file_picker: ^5.2.4
   uuid: ^3.0.7
+  cnic_scanner: ^0.0.2
 
 
 dev_dependencies:
@@ -81,6 +82,8 @@ flutter:
      - assets/images/profile.jpg
      - assets/images/guillemets.jpg
      - assets/images/blueBackground.jpg
+     - assets/images/id card.png
+     - assets/images/id_card.png
 
 
 

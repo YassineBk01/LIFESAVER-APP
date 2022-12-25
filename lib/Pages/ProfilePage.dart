@@ -7,6 +7,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lifesaver_app/Models/UserApp.dart';
+import 'package:lifesaver_app/Widgets/DrawerVerifWidget.dart';
 import 'package:lifesaver_app/Widgets/DrawerWidget.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -22,9 +23,11 @@ class _ProfilePageState extends State<ProfilePage> {
 
   String? pathProfileImmg;
   String? imagUrl;
-  PickedFile? pickedFile;
+  FilePickerResult? pickedFile;
   String? fileName;
+  String? pathImg;
   UploadTask? uploadTask;
+
 
   Future getUrl() async{
 
@@ -36,28 +39,32 @@ class _ProfilePageState extends State<ProfilePage> {
     else{
 
       final storageRef = FirebaseStorage.instance.ref();
-      final url = await storageRef.child("imgFiles").getDownloadURL();
+      print("image path ${currentUser.profileImg.toString()}");
+      final url = await storageRef.child(currentUser.profileImg.toString()).getDownloadURL();
+      print("image url ${url}");
       setState(() {
         imagUrl = url;
       });
 
     }
+
   }
 
   Future selectFile() async {
-    final result = await FilePicker.platform.pickFiles(type: FileType.image);
+    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.image);
     if(result ==null) return;
 
     setState(() {
-      pickedFile =result.files.first as PickedFile?;
-      fileName = result.files.first.name;
+      pathImg=result.files.single.path;
+      pickedFile =result ;
+      fileName = result.files.single.name;
     });
 
   }
 
   Future uploadFile() async {
     final path ='imgFiles/${currentUser.id.toString()}/${fileName}';
-    final file =File(pickedFile!.path);
+    final file =File(pathImg!);
 
     final ref = FirebaseStorage.instance.ref().child(path);
 
@@ -67,7 +74,9 @@ class _ProfilePageState extends State<ProfilePage> {
 
     final snapshot =  await uploadTask!.whenComplete(() {});
 
-    await FirebaseFirestore.instance.collection("users").doc(currentUser.id.toString()).set({
+    final downloadUrl = await snapshot.ref.getDownloadURL();
+
+    await FirebaseFirestore.instance.collection("users").doc(currentUser.id.toString()).update({
       'profileImg': path,
     }).then((value) => print("Path modifié")).catchError((error) => print("Failed to modify path: $error"));
 
@@ -90,6 +99,8 @@ class _ProfilePageState extends State<ProfilePage> {
           currentUser.hasMedicalFile=data['hasMedicalFile'];
           currentUser.profileImg = data['profileImg'];
           currentUser.isVerified = data['isVerified'];
+          print("isVerif ${currentUser.isVerified}");
+          getUrl();
         });
 
 
@@ -104,6 +115,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
     super.initState();
     getUsersData();
+
+
   }
   Widget textfield({@required hintText}) {
     return Material(
@@ -149,7 +162,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ),
       ),
-      drawer: DrawerWidget(),
+      drawer: currentUser.isVerified ? DrawerVerifWidget() : DrawerWidget(),
       body: SingleChildScrollView(
         child: Column(
 
@@ -193,8 +206,8 @@ class _ProfilePageState extends State<ProfilePage> {
                             shape: BoxShape.circle,
                             color: Colors.white,
                             image: DecorationImage(
-                                image: (pickedFile == null) ? (imagUrl == null) ? AssetImage("assets/images/profile.jpg") : NetworkImage(imagUrl!) as ImageProvider
-                                      : FileImage(File(pickedFile!.path)),
+                                image: (pickedFile == null) ? (imagUrl == null ) ? AssetImage("assets/images/profile.jpg") : NetworkImage(imagUrl!) as ImageProvider
+                                      : FileImage(File(pathImg!)),
                                 fit: BoxFit.cover,
                             )
                           ),
@@ -244,6 +257,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       textfield(
                         hintText: 'CIN : '+currentUser.cin,
                       ),
+                      SizedBox(height: 10,),
                       Container(
                         height: 55,
                         width: double.infinity,
@@ -261,7 +275,10 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                           ),
                         ),
-                      )
+                      ),
+                      SizedBox(height: 10,),
+                      buildProgress(),
+
                     ],
                   ),
                 )
@@ -275,7 +292,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   }
   Widget buildProgress() => StreamBuilder<TaskSnapshot>(
-      stream: uploadTask!.snapshotEvents,
+      stream: uploadTask?.snapshotEvents,
       builder: (builder,snapshot){
           if (snapshot.hasData){
             final data = snapshot.data!;

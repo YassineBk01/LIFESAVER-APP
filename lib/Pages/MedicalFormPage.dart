@@ -22,7 +22,7 @@ class _MedicalFormPageState extends State<MedicalFormPage> {
   final ControllerBlood = TextEditingController();
   final ControllerDisease = TextEditingController();
 
-  String Diabite = "Do you have Diabite";
+  String Diabite = "Do you have Diabete";
   String heartDisease = "Do you have Heart Disease";
   String covidVaccine = "Are you vaccinated for covid19";
 
@@ -192,14 +192,14 @@ class _MedicalFormPageState extends State<MedicalFormPage> {
                                     DropdownButtonFormField(
                                       decoration: InputDecoration(
                                         border: InputBorder.none,
-                                        hintText: 'Do you have diabite',
+                                        hintText: 'Do you have diabete',
                                         contentPadding: EdgeInsets.symmetric(horizontal: 10),
                                       ),
                                       value: Diabite,
-                                      items: <String>["Do you have Diabite","Yes","No"].map<DropdownMenuItem<String>>((String value) {
+                                      items: <String>["Do you have Diabete","Yes","No"].map<DropdownMenuItem<String>>((String value) {
                                         return DropdownMenuItem<String>(
                                           value: value,
-                                          child: (Diabite == "Do you have Diabite") ? Text(
+                                          child: (Diabite == "Do you have Diabete") ? Text(
                                             value,
                                             style: TextStyle(fontSize: 16,color: Colors.black54),
                                           ) : Text(
