@@ -12,13 +12,12 @@ MedicalFile _$MedicalFileFromJson(Map<String, dynamic> json) => MedicalFile(
       json['height'] as String,
       json['weight'] as String,
       json['age'] as int,
-      json['alergies'] as String,
+      json['alergies'] as String?,
       json['DIABETES'] as String,
       json['HEART_DISEASE'] as String,
-      json['bloodGroup'] as String,
+      json['bloodGroup'] as String?,
       json['covidVaccine'] as String,
-      json['dozeNumber'] as int,
-      json['otherDisease'] as String,
+      json['otherDisease'] as String?,
     );
 
 Map<String, dynamic> _$MedicalFileToJson(MedicalFile instance) =>
@@ -33,6 +32,5 @@ Map<String, dynamic> _$MedicalFileToJson(MedicalFile instance) =>
       'weight': instance.weight,
       'bloodGroup': instance.bloodGroup,
       'covidVaccine': instance.covidVaccine,
-      'dozeNumber': instance.dozeNumber,
       'otherDisease': instance.otherDisease,
     };

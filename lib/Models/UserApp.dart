@@ -24,13 +24,13 @@ class UserApp {
 
   final String fullname ;
   String id;
-  final int age;
+  int age;
   final String email;
   final String password;
   final String cin;
   final String phone;
-  final bool isVerified;
-  final bool hasMedicalFile;
+  bool isVerified;
+  bool hasMedicalFile;
   String profileImg;
 
 

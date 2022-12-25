@@ -6,13 +6,15 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lifesaver_app/Models/UserApp.dart';
 import 'package:lifesaver_app/Pages/MedicalFormPage.dart';
+import 'package:lifesaver_app/Widgets/DrawerVerifWidget.dart';
 
 import 'package:lifesaver_app/Widgets/DrawerWidget.dart';
+import 'package:lifesaver_app/Widgets/WarningIdWidget.dart';
 import 'package:lifesaver_app/Widgets/WarningWidget.dart';
 
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({Key? key}): super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -34,8 +36,12 @@ class _HomePageState extends State<HomePage> {
         Map<String, dynamic> data = documentSnapshot.data()! as Map<String, dynamic>;
         setState(() {
           currentUser = UserApp(id: data['id'], fullname: data['fullname'], age: data['age'], cin: data['cin'], phone: data['phone'], email: data['email'], password: data['password']);
+          currentUser.hasMedicalFile=data['hasMedicalFile'];
+          currentUser.profileImg = data['profileImg'];
+          currentUser.isVerified = data['isVerified'];
         });
 
+        print("hasfile : ${currentUser.hasMedicalFile}");
 
       } else {
         print('Document does not exist on the database');
@@ -74,14 +80,18 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
 
-      drawer: DrawerWidget(),
+      drawer: currentUser.isVerified ? DrawerVerifWidget():DrawerWidget(),
 
       body: SingleChildScrollView(
         child: Column(
           children: [
 
             Container(
-              child: currentUser.hasMedicalFile? null : WarningWidget()
+              child: currentUser.hasMedicalFile ? SizedBox(height: 10,) : WarningWidget()
+            ),
+            SizedBox(height: 20,),
+            Container(
+                child: currentUser.isVerified ? SizedBox(height: 10,) : WarningIdWidget()
             ),
             Container(
               margin: EdgeInsets.only(right: 150),

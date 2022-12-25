@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:lifesaver_app/Models/MedicalFile.dart';
+import 'package:uuid/uuid.dart';
 
 class MedicalFormPage extends StatefulWidget {
   const MedicalFormPage({Key? key}) : super(key: key);
@@ -12,16 +15,17 @@ class _MedicalFormPageState extends State<MedicalFormPage> {
   final user = FirebaseAuth.instance.currentUser!;
   var error;
   final _formKey = GlobalKey<FormState>();
-  final ControllerName = TextEditingController();
-  final ControllerPhone = TextEditingController();
-  final ControllerCIN = TextEditingController();
-  final ControllerEmail = TextEditingController();
-  final ControllerPassword = TextEditingController();
+  final ControllerHeight = TextEditingController();
+  final ControllerAge = TextEditingController();
+  final ControllerWeight = TextEditingController();
+  final ControllerAllergy = TextEditingController();
+  final ControllerBlood = TextEditingController();
   final ControllerDisease = TextEditingController();
-  
+
   String Diabite = "Do you have Diabite";
   String heartDisease = "Do you have Heart Disease";
   String covidVaccine = "Are you vaccinated for covid19";
+
 
 
   @override
@@ -112,7 +116,7 @@ class _MedicalFormPageState extends State<MedicalFormPage> {
                                   children:  [
                                     TextFormField(
                                       keyboardType: TextInputType.number,
-                                      controller : ControllerName,
+                                      controller : ControllerHeight,
                                       decoration: InputDecoration(
                                         border: InputBorder.none,
                                         hintText: 'Height in cm',
@@ -129,7 +133,7 @@ class _MedicalFormPageState extends State<MedicalFormPage> {
                                     Divider(height: 10,),
                                     TextFormField(
                                       keyboardType: TextInputType.number,
-                                      controller : ControllerCIN,
+                                      controller : ControllerWeight,
                                       decoration: InputDecoration(
                                         border: InputBorder.none,
                                         hintText: 'Weight in kg',
@@ -146,7 +150,7 @@ class _MedicalFormPageState extends State<MedicalFormPage> {
                                     Divider(height: 10,),
                                     TextFormField(
                                       keyboardType: TextInputType.number,
-                                      controller : ControllerPhone,
+                                      controller : ControllerAge,
                                       decoration: InputDecoration(
 
                                         border: InputBorder.none,
@@ -164,8 +168,8 @@ class _MedicalFormPageState extends State<MedicalFormPage> {
                                     ),
                                     Divider(height: 10,),
                                     TextFormField(
-                                      keyboardType: TextInputType.number,
-                                      controller : ControllerPassword,
+                                     
+                                      controller : ControllerBlood,
                                       decoration: InputDecoration(
 
                                         border: InputBorder.none,
@@ -176,7 +180,7 @@ class _MedicalFormPageState extends State<MedicalFormPage> {
                                     ),
                                     Divider(height: 10,),
                                     TextFormField(
-                                      controller : ControllerEmail,
+                                      controller : ControllerAllergy,
                                       decoration: InputDecoration(
                                         border: InputBorder.none,
                                         hintText: 'If you have an allergy describe it  ',
@@ -200,7 +204,7 @@ class _MedicalFormPageState extends State<MedicalFormPage> {
                                             style: TextStyle(fontSize: 16,color: Colors.black54),
                                           ) : Text(
                                             value,
-                                            style: TextStyle(fontSize: 20),
+                                            style: TextStyle(fontSize: 18),
                                           ),
                                         );}).toList(),
                                       onChanged: (String? newValue) {
@@ -225,7 +229,7 @@ class _MedicalFormPageState extends State<MedicalFormPage> {
                                             style: TextStyle(fontSize: 16,color: Colors.black54),
                                           ) : Text(
                                             value,
-                                            style: TextStyle(fontSize: 20),
+                                            style: TextStyle(fontSize: 18),
                                           ),
                                         );}).toList(),
                                       onChanged: (String? newValue) {
@@ -252,7 +256,7 @@ class _MedicalFormPageState extends State<MedicalFormPage> {
                                                     style: TextStyle(fontSize: 16,color: Colors.black54),
                                                   ) : Text(
                                                     value,
-                                                    style: TextStyle(fontSize: 20),
+                                                    style: TextStyle(fontSize: 18),
                                                   ),
                                                 );}).toList(),
                                               onChanged: (String? newValue) {
@@ -290,7 +294,7 @@ class _MedicalFormPageState extends State<MedicalFormPage> {
                                 color: Colors.blue[800],
                                 child: const Text('Submit', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white,fontSize: 17),textAlign: TextAlign.center,),
                                 onPressed: (){if (_formKey.currentState!.validate()) {
-
+                                       addMedicalForm();
                                 }},
                               ),
                               const SizedBox(height: 30),
@@ -312,5 +316,38 @@ class _MedicalFormPageState extends State<MedicalFormPage> {
         ),
       ),
     );
+  }
+  Future addMedicalForm() async{
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => Center(child: CircularProgressIndicator(),)
+    );
+    try {
+
+      CollectionReference users = FirebaseFirestore.instance.collection('users');
+
+      CollectionReference medicalFiles = FirebaseFirestore.instance.collection('medicalFiles');
+
+      String idMedicalFile= Uuid().v4();
+      MedicalFile medicalFile =MedicalFile(idMedicalFile, user.uid.toString(), ControllerHeight.text.trim(), ControllerWeight.text.trim(), int.parse(ControllerAge.text.trim()), ControllerAllergy.text.trim(), Diabite,heartDisease, ControllerBlood.text.trim(), covidVaccine, ControllerDisease.text.trim());
+      final json = medicalFile.toJson();
+
+      await medicalFiles.doc(idMedicalFile).set(json).then((value) => print("Medical File Added")).catchError((error) => print("Failed to add Medical File: $error"));
+
+      await users.doc(user.uid.toString()).update({'hasMedicalFile': true ,'age': medicalFile.age }).then((value) => print("User Updated")).catchError((error) => print("Failed to update user: $error"));
+
+
+    } on FirebaseAuthException catch (e){
+      print(e);
+      setState(() {
+        error=e.message;
+      });
+    }
+
+
+    Navigator.of(context).popUntil((route) => route.isFirst);
+
+
   }
 }

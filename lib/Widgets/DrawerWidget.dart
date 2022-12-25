@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lifesaver_app/Pages/HomePage.dart';
+import 'package:lifesaver_app/Pages/IdVerificationPage.dart';
 import 'package:lifesaver_app/Pages/LoginPage.dart';
 import 'package:lifesaver_app/Pages/ProfilePage.dart';
 
@@ -72,9 +73,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               leading: FaIcon(FontAwesomeIcons.idCard, size: _drawerIconSize,color: Theme.of(context).accentColor),
               title: Text('Vérifier votre Identité',style: TextStyle(fontSize: _drawerFontSize,color: Theme.of(context).accentColor),),
               onTap: () {
-                //Navigator.push( co
-                //
-                // ntext, MaterialPageRoute(builder: (context) => ForgotPasswordPage()),);
+                Navigator.push( context, MaterialPageRoute(builder: (context) => IdVerificationPage()),);
               },
             ),
             Divider(color: Theme.of(context).primaryColor, height: 1,),

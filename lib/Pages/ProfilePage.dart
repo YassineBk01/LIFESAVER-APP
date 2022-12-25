@@ -87,6 +87,9 @@ class _ProfilePageState extends State<ProfilePage> {
         Map<String, dynamic> data = documentSnapshot.data()! as Map<String, dynamic>;
         setState(() {
           currentUser = UserApp(id: data['id'], fullname: data['fullname'], age: data['age'], cin: data['cin'], phone: data['phone'], email: data['email'], password: data['password']);
+          currentUser.hasMedicalFile=data['hasMedicalFile'];
+          currentUser.profileImg = data['profileImg'];
+          currentUser.isVerified = data['isVerified'];
         });
 
 
