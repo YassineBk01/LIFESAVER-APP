@@ -185,7 +185,7 @@ class _HomePageState extends State<HomePage> {
                     margin: EdgeInsets.only(top: 20, right: 120, left: 10),
                     child: Column(
                       children: [
-                        Text("Jamal Belmaddi",
+                        Text("Yassine Bakili",
                           style: GoogleFonts.montserrat(
                             fontSize: 20,
                             fontWeight: FontWeight.w600,
@@ -284,7 +284,7 @@ class _HomePageState extends State<HomePage> {
                     margin: EdgeInsets.only(top: 20, right: 120, left: 10),
                     child: Column(
                       children: [
-                        Text("Jamal Belmaddi",
+                        Text("Ayoub Moussaoui",
                           style: GoogleFonts.montserrat(
                             fontSize: 20,
                             fontWeight: FontWeight.w600,
@@ -394,7 +394,7 @@ class _HomePageState extends State<HomePage> {
                     child: InkWell(
 
                       child: Text(
-                        "E-mesure",
+                        "Emergency calls",
                         style: GoogleFonts.montserrat(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
@@ -466,7 +466,7 @@ class _HomePageState extends State<HomePage> {
                     alignment: Alignment.center,
                     child: InkWell(
                       child: Text(
-                        "Digital",
+                        "Health care",
                         style: GoogleFonts.montserrat(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
@@ -537,7 +537,7 @@ class _HomePageState extends State<HomePage> {
                     alignment: Alignment.center,
                     child: InkWell(
                       child: Text(
-                        "Academy",
+                        "Safety",
                         style: GoogleFonts.montserrat(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,

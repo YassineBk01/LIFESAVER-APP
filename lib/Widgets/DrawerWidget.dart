@@ -91,13 +91,16 @@ class _DrawerWidgetState extends State<DrawerWidget> {
               leading: Icon(Icons.logout_rounded, size: _drawerIconSize,color: Theme.of(context).accentColor,),
               title: Text('Logout',style: TextStyle(fontSize: _drawerFontSize,color: Theme.of(context).accentColor),),
               onTap: () {
-                FirebaseAuth.instance.signOut();
-
+                _signOut();
+                Navigator.of(context).popUntil((route) => route.isFirst);
               },
             ),
           ],
         ),
       ),
     );
+  }
+  Future<void> _signOut() async {
+    await FirebaseAuth.instance.signOut();
   }
 }
