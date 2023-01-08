@@ -34,7 +34,7 @@ class _IdVerificationPageState extends State<IdVerificationPage> {
       doiTEController.text = _cnicModel.cnicIssueDate;
       doeTEController.text = _cnicModel.cnicExpiryDate;
     });
-    print("cin : ${cnicTEController.text}");
+    print("cin : ${cnicTEController.text} , fullname ${nameTEController.text} ");
 
     }
 
