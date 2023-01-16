@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lifesaver_app/Models/UserApp.dart';
 import 'package:lifesaver_app/Pages/MedicalFormPage.dart';
+import 'package:lifesaver_app/Services/BackgroundTask.dart';
 import 'package:lifesaver_app/Widgets/DrawerVerifWidget.dart';
 
 import 'package:lifesaver_app/Widgets/DrawerWidget.dart';
@@ -54,6 +55,8 @@ class _HomePageState extends State<HomePage> {
 
     super.initState();
     getUsersData();
+    BackgroundTask().startListening();
+
   }
 
   @override
@@ -365,12 +368,12 @@ class _HomePageState extends State<HomePage> {
                         .of(context)
                         .size
                         .width / 3,
-                    height: 100,
+                    height: 90,
 
                     margin: EdgeInsets.only(top: 10),
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage("assets/images/appLogo.png"),
+                        image: AssetImage("assets/images/emergency.png"),
                       ),
                     ),
 
@@ -443,7 +446,7 @@ class _HomePageState extends State<HomePage> {
                     margin: EdgeInsets.only(top: 10),
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage("assets/images/appLogo.png"),
+                        image: AssetImage("assets/images/healthCare.jpg"),
                       ),
                     ),
 
@@ -515,7 +518,7 @@ class _HomePageState extends State<HomePage> {
                     margin: EdgeInsets.only(top: 10),
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage("assets/images/appLogo.png"),
+                        image: AssetImage("assets/images/safety.jpg"),
                       ),
                     ),
 

@@ -1,8 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lifesaver_app/Pages/HomePage.dart';
+import 'package:lifesaver_app/Pages/IdicationsSecoursPage.dart';
 import 'package:lifesaver_app/Pages/LoginPage.dart';
 import 'package:lifesaver_app/Pages/ProfilePage.dart';
+import 'package:lifesaver_app/Widgets/ListInddicationsWidget.dart';
 
 
 class DrawerVerifWidget extends StatefulWidget {
@@ -55,7 +58,7 @@ class _DrawerVerifWidgetState extends State<DrawerVerifWidget> {
               leading: Icon(FontAwesomeIcons.homeUser, size: _drawerIconSize,color: Theme.of(context).accentColor),
               title: Text('Home Page',style: TextStyle(fontSize: _drawerFontSize,color: Theme.of(context).accentColor),),
               onTap: () {
-                //Navigator.push(context, MaterialPageRoute(builder: (context) => ManageInterventions()),);
+                Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()),);
               },
             ),
             Divider(color: Theme.of(context).primaryColor, height: 1,),
@@ -70,9 +73,8 @@ class _DrawerVerifWidgetState extends State<DrawerVerifWidget> {
               leading: FaIcon(FontAwesomeIcons.notesMedical, size: _drawerIconSize,color: Theme.of(context).accentColor),
               title: Text('Indications de secours',style: TextStyle(fontSize: _drawerFontSize,color: Theme.of(context).accentColor),),
               onTap: () {
-                //Navigator.push( co
-                //
-                // ntext, MaterialPageRoute(builder: (context) => ForgotPasswordPage()),);
+                Navigator.push( context, MaterialPageRoute(builder: (context) =>IndicationsSecoursPage()),);
+
               },
             ),
             Divider(color: Theme.of(context).primaryColor, height: 1,),

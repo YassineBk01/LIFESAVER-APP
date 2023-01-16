@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:lifesaver_app/Widgets/DrawerWidget.dart';
 import 'package:cnic_scanner/model/cnic_model.dart';
 import 'package:image_picker/image_picker.dart';
@@ -16,27 +18,61 @@ class IdVerificationPage extends StatefulWidget {
 
 class _IdVerificationPageState extends State<IdVerificationPage> {
   final user = FirebaseAuth.instance.currentUser!;
-  TextEditingController nameTEController = TextEditingController(),
-      cnicTEController = TextEditingController(),
-      dobTEController = TextEditingController(),
-      doiTEController = TextEditingController(),
-      doeTEController = TextEditingController();
-  CnicModel _cnicModel = CnicModel();
-  Future<void> scanCnic(ImageSource imageSource) async {
-    CnicModel cnicModel =
-    await CnicScanner().scanImage(imageSource: imageSource);
-    if (cnicModel == null) return;
-    setState(() {
-      _cnicModel = cnicModel;
-      nameTEController.text = _cnicModel.cnicHolderName;
-      cnicTEController.text = _cnicModel.cnicNumber;
-      dobTEController.text = _cnicModel.cnicHolderDateOfBirth;
-      doiTEController.text = _cnicModel.cnicIssueDate;
-      doeTEController.text = _cnicModel.cnicExpiryDate;
-    });
-    print("cin : ${cnicTEController.text} , fullname ${nameTEController.text} ");
+  XFile? _imageFile;
+  String _text = '';
+  String cin="";
+  bool isVerified=false;
+  String message="";
 
+  Future<void> getImageAndExtractText() async {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(user.uid.toString())
+        .get()
+        .then((DocumentSnapshot documentSnapshot) {
+      if (documentSnapshot.exists) {
+        Map<String, dynamic> data = documentSnapshot.data()! as Map<String, dynamic>;
+        cin = data['cin'];
+        print('cin : ${cin}');
+      } else {
+        print('Document does not exist on the database');
+      }
+    });
+    final imageFile = await ImagePicker().pickImage(source: ImageSource.camera);
+
+    setState(() {
+      _imageFile = imageFile;
+    });
+    final inputImage = InputImage.fromFilePath(_imageFile!.path);
+
+    final textDetector = GoogleMlKit.vision.textDetector();
+    RecognisedText recognisedText = await textDetector.processImage(inputImage);
+    await textDetector.close();
+
+    for (TextBlock block in recognisedText.blocks) {
+      for (TextLine line in block.lines) {
+
+        setState(() {
+          _text += line.text + " ";
+        });
+
+
+      }
     }
+    isVerified = _text.contains(cin);
+    print('isverif : ${_text.contains(cin)}');
+
+    if(isVerified){
+      message="Your Account is Verified Successfully!";
+    }else{
+      message="We Couldn't verify your account! Try Again!";
+    }
+
+    CollectionReference users = FirebaseFirestore.instance.collection('users');
+    await users.doc(user.uid.toString()).update({'isVerified': isVerified }).then((value) => print("User Updated")).catchError((error) => print("Failed to update user: $error"));
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +134,10 @@ class _IdVerificationPageState extends State<IdVerificationPage> {
                 SizedBox(height: 34,),
                 ElevatedButton(
                     onPressed: (){
-                      scanCnic(ImageSource.camera);
+                      setState(() {
+                        _text='';
+                      });
+                        VerificationId();
                     },
                     child: Text(
                       "Scan your ID",
@@ -109,6 +148,17 @@ class _IdVerificationPageState extends State<IdVerificationPage> {
                         )
                     )
                 ),
+                SizedBox(height: 25,),
+                Text(message,
+                style: GoogleFonts.overpass(
+                  textStyle: TextStyle(
+                    color: isVerified ? Colors.green:Colors.red,
+                    fontSize: 17,
+                    fontWeight: FontWeight.w400,
+
+                  ),),
+                ),
+                Text(_text)
               ],
             ),
           )
@@ -116,4 +166,15 @@ class _IdVerificationPageState extends State<IdVerificationPage> {
       ),
     );
   }
+
+ void VerificationId() async{
+   showDialog(
+       context: context,
+       barrierDismissible: false,
+       builder: (context) => Center(child: CircularProgressIndicator(),)
+   );
+    await getImageAndExtractText();
+
+   Navigator.pop(context);
+ }
 }

@@ -49,6 +49,10 @@ dependencies:
   file_picker: ^5.2.4
   uuid: ^3.0.7
   cnic_scanner: ^0.0.2
+  geolocator: ^9.0.2
+  shake: ^2.2.0
+  flutter_local_notifications: ^13.0.0
+  google_ml_kit: ^0.7.3
 
 
 dev_dependencies:
@@ -84,6 +88,9 @@ flutter:
      - assets/images/blueBackground.jpg
      - assets/images/id card.png
      - assets/images/id_card.png
+     - assets/images/emergency.png
+     - assets/images/healthCare.jpg
+     - assets/images/safety.jpg
 
 
 
