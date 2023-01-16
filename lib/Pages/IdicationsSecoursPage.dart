@@ -53,7 +53,7 @@ class _IndicationsSecoursPageState extends State<IndicationsSecoursPage> {
     return  Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text( "Indications Secours",
+        title: Text( "Indications De Secours",
           style: TextStyle(
             fontSize: 19,
             fontWeight: FontWeight.w500,
